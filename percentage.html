@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percentage Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            margin-top: 100px;
+        }
+        .calculator {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f7ef;
+            border-radius: 4px;
+            display: none;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background-color: #eee;
+            cursor: pointer;
+        }
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body style="background: linear-gradient(90deg,rgb(30, 31, 31) 0%, rgb(42, 42, 43) 50%, rgb(0, 0, 0) 100%);">
+    <div class="calculator">
+        <h1>Percentage Calculator</h1>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab(0)">X% of Y</div>
+            <div class="tab" onclick="switchTab(1)">X is what % of Y</div>
+            <div class="tab" onclick="switchTab(2)">X to Y % change</div>
+        </div>
+        
+        <div class="tab-content active" id="tab1">
+            <div class="input-group">
+                <label for="percentage1">What is</label>
+                <input type="number" id="percentage1" placeholder="Enter percentage">
+            </div>
+            <div class="input-group">
+                <label for="number1">% of</label>
+                <input type="number" id="number1" placeholder="Enter number">
+            </div>
+            <button onclick="calculatePercentage()">Calculate</button>
+            <div class="result" id="result1"></div>
+        </div>
+        
+        <div class="tab-content" id="tab2">
+            <div class="input-group">
+                <label for="number2a">What percentage is</label>
+                <input type="number" id="number2a" placeholder="Enter first number">
+            </div>
+            <div class="input-group">
+                <label for="number2b">of</label>
+                <input type="number" id="number2b" placeholder="Enter second number">
+            </div>
+            <button onclick="calculateWhatPercentage()">Calculate</button>
+            <div class="result" id="result2"></div>
+        </div>
+        
+        <div class="tab-content" id="tab3">
+            <div class="input-group">
+                <label for="number3a">From</label>
+                <input type="number" id="number3a" placeholder="Enter initial value">
+            </div>
+            <div class="input-group">
+                <label for="number3b">to</label>
+                <input type="number" id="number3b" placeholder="Enter final value">
+            </div>
+            <button onclick="calculatePercentageChange()">Calculate</button>
+            <div class="result" id="result3"></div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabIndex) {
+            // Hide all tab contents and remove active class from tabs
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabs = document.querySelectorAll('.tab');
+            
+            tabContents.forEach(content => content.classList.remove('active'));
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content and add active class to tab
+            tabContents[tabIndex].classList.add('active');
+            tabs[tabIndex].classList.add('active');
+        }
+        
+        function calculatePercentage() {
+            const percentage = parseFloat(document.getElementById('percentage1').value);
+            const number = parseFloat(document.getElementById('number1').value);
+            
+            if (isNaN(percentage) || isNaN(number)) {
+                alert('Please enter valid numbers');
+                return;
+            }
+            
+            const result = (percentage / 100) * number;
+            document.getElementById('result1').innerHTML = `
+                <strong>Result:</strong> ${percentage}% of ${number} is <strong>${result.toFixed(2)}</strong>
+            `;
+            document.getElementById('result1').style.display = 'block';
+        }
+        
+        function calculateWhatPercentage() {
+            const numberA = parseFloat(document.getElementById('number2a').value);
+            const numberB = parseFloat(document.getElementById('number2b').value);
+            
+            if (isNaN(numberA) || isNaN(numberB)) {
+                alert('Please enter valid numbers');
+                return;
+            }
+            
+            if (numberB === 0) {
+                alert('Second number cannot be zero');
+                return;
+            }
+            
+            const percentage = (numberA / numberB) * 100;
+            document.getElementById('result2').innerHTML = `
+                <strong>Result:</strong> ${numberA} is <strong>${percentage.toFixed(2)}%</strong> of ${numberB}
+            `;
+            document.getElementById('result2').style.display = 'block';
+        }
+        
+        function calculatePercentageChange() {
+            const initial = parseFloat(document.getElementById('number3a').value);
+            const final = parseFloat(document.getElementById('number3b').value);
+            
+            if (isNaN(initial) || isNaN(final)) {
+                alert('Please enter valid numbers');
+                return;
+            }
+            
+            if (initial === 0) {
+                alert('Initial value cannot be zero');
+                return;
+            }
+            
+            const change = ((final - initial) / initial) * 100;
+            document.getElementById('result3').innerHTML = `
+                <strong>Result:</strong> From ${initial} to ${final} is a <strong>${change.toFixed(2)}%</strong> ${change >= 0 ? 'increase' : 'decrease'}
+            `;
+            document.getElementById('result3').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
